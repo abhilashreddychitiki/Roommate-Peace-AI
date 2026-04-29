@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const openai = getOpenAI();
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "meta/llama-3.1-70b-instruct",
     max_tokens: 300,
     temperature: 0.7,
     messages: [

@@ -2,7 +2,7 @@
 
 Roommate Peace AI is a polished single-page web app that helps roommates handle conflict with more clarity and less friction. It lets users analyze a tense situation, rewrite a message in a calmer tone, and generate a fair roommate agreement in seconds.
 
-Built with Next.js 14, TypeScript, Tailwind CSS, Framer Motion, Lucide icons, and the OpenAI API.
+Built with Next.js 14, TypeScript, Tailwind CSS, Framer Motion, Lucide icons, and the NVIDIA API catalog through the OpenAI-compatible SDK.
 
 ## Features
 
@@ -18,7 +18,7 @@ Built with Next.js 14, TypeScript, Tailwind CSS, Framer Motion, Lucide icons, an
 - Next.js 14 App Router
 - TypeScript
 - Tailwind CSS
-- OpenAI Node SDK
+- OpenAI Node SDK configured for NVIDIA's OpenAI-compatible endpoint
 - Framer Motion
 - Lucide React
 
@@ -33,11 +33,13 @@ The app has three AI-powered flows, each backed by its own API route:
 - `POST /api/agreement`
   Accepts an agreement topic and extra context, then returns a short agreement with rules and a review timeline.
 
-All OpenAI calls use:
+All AI calls use:
 
-- `model: "gpt-4o-mini"`
+- `model: "meta/llama-3.1-70b-instruct"`
 - `max_tokens: 300`
 - `temperature: 0.7`
+
+The app sends those requests to NVIDIA's hosted LLM endpoint at `https://integrate.api.nvidia.com/v1`.
 
 ## Local Development
 
@@ -49,10 +51,10 @@ npm install
 
 ### 2. Create your local environment file
 
-Copy `.env.local.example` to `.env.local` and add your API key:
+Copy `.env.local.example` to `.env.local` and add your NVIDIA API key:
 
 ```env
-OPENAI_API_KEY=your_openai_api_key_here
+NVIDIA_API_KEY=your_nvidia_api_key_here
 ```
 
 ### 3. Start the dev server
@@ -123,17 +125,18 @@ This app is ready for Vercel deployment.
 
 1. Push the repository to GitHub.
 2. Import the repo into Vercel.
-3. Add the `OPENAI_API_KEY` environment variable.
+3. Add the `NVIDIA_API_KEY` environment variable.
 4. Deploy.
 
 ## Environment Variables
 
 | Variable | Required | Description |
 | --- | --- | --- |
-| `OPENAI_API_KEY` | Yes | API key used by the OpenAI SDK in server routes |
+| `NVIDIA_API_KEY` | Yes | API key used for NVIDIA's hosted OpenAI-compatible endpoint |
 
 ## Notes
 
-- The OpenAI client is created lazily at request time, so production builds do not require the API key to be present.
+- The SDK client is created lazily at request time, so production builds do not require the API key to be present.
 - The app does not include authentication or a database.
 - The project is intentionally lightweight and focused on a single-page experience.
+- The code currently accepts `OPENAI_API_KEY` as a fallback, but `NVIDIA_API_KEY` is the intended environment variable going forward.
